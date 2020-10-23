@@ -29,7 +29,7 @@ from decimal import *
 import time
 
 
-credentials = boto3.Session(aws_access_key_id = 'AKIASE2UHTMGR22PS4EM', aws_secret_access_key='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').get_credentials()
+credentials = boto3.Session(aws_access_key_id = 'enter-access-key-here', aws_secret_access_key='enter-secret-access-key-here').get_credentials()
 
 
 region = 'us-west-2'
@@ -51,7 +51,7 @@ es = Elasticsearch(
 print(es)
 
 
-dynamodb=boto3.resource('dynamodb',region_name='us-west-2',aws_access_key_id = 'AKIASE2UHTMGR22PS4EM', aws_secret_access_key='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')
+dynamodb=boto3.resource('dynamodb',region_name='us-west-2',aws_access_key_id = 'enter-access-key-here', aws_secret_access_key='enter-secret-access-key-here')
 table=dynamodb.Table('yelp-restaurants')
 
 

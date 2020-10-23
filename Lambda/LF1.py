@@ -108,7 +108,16 @@ def validate_order_restaurants(location, cuisine, date, time, phone_number, no_o
             return build_validation_result(False, 'Date',
                                            'You can book restaurants from today onwards.'
                                            'Can you try a different date?')
-
+    
+    if time:
+        if datetime.datetime.strptime(date, '%Y-%m-%d').date() == datetime.date.today():
+            current_time = datetime.datetime.now().time().strftime("%H")
+            input_time = str(time)[:2]
+            if int(input_time) <= int(str(current_time)):
+                return build_validation_result(False, 'time',
+                                           'Time you entered has already passed. '
+                                           'Please try a different time?')
+                                           
     if phone_number is not None:
         phone_number = str(phone_number)
         if not phone_number[0:2] == "+1":
@@ -140,6 +149,8 @@ def dining_suggestions(intent_request):
     source = intent_request['invocationSource']
 
     if source == 'DialogCodeHook':
+        # Perform basic validation on the supplied input slots.
+        # Use the elicitSlot dialog action to re-prompt for the first violation detected.
         slots = get_slots(intent_request)
 
         validation_result = validate_order_restaurants(location, cuisine, date, time, phone_number,
@@ -181,15 +192,23 @@ def dining_suggestions(intent_request):
 
 
 def dispatch(intent_request):
+    """
+    Called when the user specifies an intent for this bot.
+    """
+
     logger.debug(
         'dispatch userId={}, intentName={}'.format(intent_request['userId'], intent_request['currentIntent']['name']))
 
     intent_name = intent_request['currentIntent']['name']
 
+    # Dispatch to your bot's intent handlers
     if intent_name == 'DiningSuggestionsIntent':
         return dining_suggestions(intent_request)
-    
+    # raise Exception('Intent with name ' + intent_name + ' not supported')
+
+
 def lambda_handler(event, context):
+    #     # TODO implement
     os.environ['TZ'] = 'America/New_York'
     time.tzset()
     logger.debug('event.bot.name={}'.format(event['bot']['name']))

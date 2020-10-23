@@ -80,10 +80,6 @@ def isvalid_city(city):
     valid_cities = ['new york']
     return city.lower() in valid_cities
 
-def isvalid_time(time):
-    return city.lower() in valid_cities
-
-
 def validate_order_restaurants(location, cuisine, date, time, phone_number, no_of_people):
 
     if location and not isvalid_city(location):
